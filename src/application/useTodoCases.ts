@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {addToList, removeFromList, Todo, TodoList} from "../domain/todo";
+import {addToList, removeFromList, setCompletedStatus, Todo, TodoList} from "../domain/todo";
 import {TodoRepository} from "./todoRepository";
 
 export function useTodoCases(todoRepository: TodoRepository) {
@@ -34,10 +34,25 @@ export function useTodoCases(todoRepository: TodoRepository) {
     })
   }
 
+  function toggleDoneCase(todo: Todo): void {
+    setTodos(todos => {
+      try {
+        const updated = setCompletedStatus(todos, todo.id, !todo.completed);
+        todoRepository.saveTodos(updated);
+        return updated;
+      } catch (error) {
+        const completedError  = error as Error;
+        setError(completedError);
+        return todos;
+      }
+    });
+  }
+
   return {
     todos,
     addTodoCase,
     removeTodoCase,
+    toggleDoneCase,
     error
   }
 }

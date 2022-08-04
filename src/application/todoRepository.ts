@@ -1,4 +1,4 @@
-import {TodoList} from "../domain/todo";
+import {Todo, TodoList} from "../domain/todo";
 
 export interface TodoRepository {
   getTodos(): TodoList;
@@ -15,5 +15,14 @@ export class MemoryTodoRepository implements TodoRepository{
 
   saveTodos(todos: TodoList) {
     this.todoList = [...todos]
+  }
+
+  static randomTodo(): Todo {
+    const id = Math.floor(Math.random() * 20000).toString();
+    return {
+      id,
+      completed: false,
+      title: `Random uid - ${id}`
+    };
   }
 }
