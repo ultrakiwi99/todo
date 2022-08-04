@@ -6,10 +6,14 @@ export function useTodoCases(todoRepository: TodoRepository) {
   const [todos, setTodos] = useState<TodoList>(todoRepository.getTodos());
   const [error, setError] = useState<Error | null>(null);
 
-  function addTodoCase(todo: Todo): void {
+  function addTodoCase(title: string): void {
     setTodos(todos => {
       try {
-        const updated = addToList(todos, todo);
+        const updated = addToList(todos, {
+          id: Math.floor(Math.random() * 10000).toString(),
+          title,
+          completed: false
+        });
         todoRepository.saveTodos(updated);
         return updated;
       } catch (error) {

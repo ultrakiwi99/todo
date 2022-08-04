@@ -1,5 +1,6 @@
 import {useTodoCases} from "../../application/useTodoCases";
 import {MemoryTodoRepository} from "../../application/todoRepository";
+import {AddTodo} from "./add-todo/AddTodo";
 
 export function TodoList() {
   const {
@@ -8,6 +9,10 @@ export function TodoList() {
     removeTodoCase,
     toggleDoneCase
   } = useTodoCases(new MemoryTodoRepository());
+
+  function addHandler(title: string) {
+    addTodoCase(title);
+  }
 
   return (
     <section>
@@ -21,7 +26,7 @@ export function TodoList() {
           <button onClick={() => removeTodoCase(todo)}>X</button>
         </li>)}
       </ul>
-      <button onClick={() => addTodoCase(MemoryTodoRepository.randomTodo())}>Add todo</button>
+      <AddTodo addTodoHandler={addHandler}/>
     </section>
   )
 }
