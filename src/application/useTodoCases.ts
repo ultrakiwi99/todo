@@ -1,21 +1,18 @@
 import {useState} from "react";
-import {addToList, removeFromList, setCompletedStatus, Todo, TodoList} from "../domain/todo";
-import {TodoRepository} from "./todoRepository";
+import {addToList, ID, removeFromList, setCompletedStatus, Todo, TodoList} from "../domain/todo";
 
-export function useTodoCases(todoRepository: TodoRepository) {
-  const [todos, setTodos] = useState<TodoList>(todoRepository.getTodos());
+export function useTodoCases() {
+  const [todos, setTodos] = useState<TodoList>([]);
   const [error, setError] = useState<Error | null>(null);
 
   function addTodoCase(title: string): void {
     setTodos(todos => {
       try {
-        const updated = addToList(todos, {
+        return addToList(todos, {
           id: Math.floor(Math.random() * 10000).toString(),
           title,
           completed: false
         });
-        todoRepository.saveTodos(updated);
-        return updated;
       } catch (error) {
         const addError = error as Error;
         setError(addError);
@@ -27,9 +24,7 @@ export function useTodoCases(todoRepository: TodoRepository) {
   function removeTodoCase(todo: Todo): void {
     setTodos(todos => {
       try {
-        const updated = removeFromList(todos, todo.id);
-        todoRepository.saveTodos(updated);
-        return updated;
+        return removeFromList(todos, todo.id);
       } catch (error) {
         const removeError = error as Error;
         setError(removeError);
@@ -41,9 +36,7 @@ export function useTodoCases(todoRepository: TodoRepository) {
   function toggleDoneCase(todo: Todo): void {
     setTodos(todos => {
       try {
-        const updated = setCompletedStatus(todos, todo.id, !todo.completed);
-        todoRepository.saveTodos(updated);
-        return updated;
+        return setCompletedStatus(todos, todo.id, !todo.completed);
       } catch (error) {
         const completedError  = error as Error;
         setError(completedError);
@@ -52,11 +45,21 @@ export function useTodoCases(todoRepository: TodoRepository) {
     });
   }
 
+  function loadTodo(todoID: ID): Todo {
+    const todo = todos.find(todo => todo.id === todoID);
+    if (!todo) {
+      throw Error(`Todo id: ${todoID} not found!`);
+    }
+
+    return todo;
+  }
+
   return {
     todos,
     addTodoCase,
     removeTodoCase,
     toggleDoneCase,
+    loadTodo,
     error
   }
 }
