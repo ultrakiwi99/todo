@@ -1,8 +1,24 @@
 import {AddTodo} from "./add-todo/AddTodo";
 import {Link} from "react-router-dom";
 import {TodoList} from "../../domain/todo";
+import {ApolloError} from "@apollo/client";
 
-export function TodoListView({todos, addTodo}: {todos: TodoList, addTodo: (title:string) => void}) {
+type TodoListViewProps = {
+  todos: TodoList;
+  addTodo: (title:string) => void;
+  error: ApolloError | undefined;
+  loading: boolean;
+}
+
+export function TodoListView({todos, addTodo, loading, error}: TodoListViewProps) {
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>{error.message}</p>
+  }
+
   return (
     <section>
       <h1>List of Todos</h1>

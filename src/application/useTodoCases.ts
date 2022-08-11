@@ -1,9 +1,11 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {addToList, ID, removeFromList, setCompletedStatus, Todo, TodoList} from "../domain/todo";
+import {useQuery} from "@apollo/client";
+import {GET_TODOS} from "./queries";
 
 export function useTodoCases() {
+  const { loading, error, data } = useQuery(GET_TODOS);
   const [todos, setTodos] = useState<TodoList>([]);
-  const [error, setError] = useState<Error | null>(null);
 
   function addTodoCase(title: string): void {
     setTodos(todos => {
@@ -14,8 +16,6 @@ export function useTodoCases() {
           completed: false
         });
       } catch (error) {
-        const addError = error as Error;
-        setError(addError);
         return todos;
       }
     });
@@ -26,8 +26,6 @@ export function useTodoCases() {
       try {
         return removeFromList(todos, todo.id);
       } catch (error) {
-        const removeError = error as Error;
-        setError(removeError);
         return todos;
       }
     })
@@ -38,8 +36,6 @@ export function useTodoCases() {
       try {
         return setCompletedStatus(todos, todo.id, !todo.completed);
       } catch (error) {
-        const completedError  = error as Error;
-        setError(completedError);
         return todos;
       }
     });
@@ -54,12 +50,19 @@ export function useTodoCases() {
     return todo;
   }
 
+  useEffect(() => {
+    if (data && data.todos && data.todos.data && Array.isArray(data.todos.data)) {
+      setTodos(data.todos.data);
+    }
+  }, [data]);
+
   return {
     todos,
     addTodoCase,
     removeTodoCase,
     toggleDoneCase,
     loadTodo,
+    loading,
     error
   }
 }

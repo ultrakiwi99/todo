@@ -11,16 +11,20 @@ function App() {
     addTodoCase,
     loadTodo,
     toggleDoneCase,
-    removeTodoCase
+    removeTodoCase,
+    error,
+    loading
   } = useTodoCases();
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<TodoListView todos={todos} addTodo={addTodoCase}/>} />
+        <Route path="/" element={
+          <TodoListView todos={todos} addTodo={addTodoCase} error={error} loading={loading}/>
+        }/>
         <Route path=":todoID" element={
           <TodoCard loadTodo={loadTodo} toggleDone={toggleDoneCase} removeTodo={removeTodoCase}/>
-        } />
+        }/>
       </Routes>
     </BrowserRouter>
   );
