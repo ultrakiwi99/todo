@@ -2,9 +2,16 @@ import {FormEvent, useState} from "react";
 
 export function AddTodo({addTodoHandler}: {addTodoHandler: (title: string) => void}) {
   const [title, setTitle] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   function handleInput(event:FormEvent<HTMLInputElement>) {
-    setTitle((event.target as HTMLInputElement).value);
+    const title = (event.target as HTMLInputElement).value;
+    setTitle(title);
+    if (!title || title.length < 5 || title.length > 25) {
+      setError('Min 5 letters or max 25 letters length.');
+    } else {
+      setError('');
+    }
   }
 
   function keyDownHandler(key: string) {
@@ -14,7 +21,7 @@ export function AddTodo({addTodoHandler}: {addTodoHandler: (title: string) => vo
   }
 
   function addHandler() {
-    if (title) {
+    if (title && !error) {
       addTodoHandler(title);
       setTitle('');
     }
@@ -26,9 +33,12 @@ export function AddTodo({addTodoHandler}: {addTodoHandler: (title: string) => vo
         value={title}
         type={"text"}
         name={"title"}
+        placeholder={'Enter task title...'}
         onKeyDown={(event) => keyDownHandler(event.key)}
+        required={true}
         onInput={handleInput}/>
-      <button onClick={addHandler}>Add</button>
+      {!!error && <p>{error}</p>}
+      <button onClick={addHandler} disabled={!!error}>Add</button>
     </section>
   );
 }
