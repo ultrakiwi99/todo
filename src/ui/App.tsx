@@ -9,14 +9,18 @@ function App() {
   const {
     todos,
     addTodoCase,
-    loadTodo
+    loadTodo,
+    toggleDoneCase,
+    removeTodoCase
   } = useTodoCases();
 
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<TodoListView todos={todos} addTodo={addTodoCase}/>} />
-        <Route path=":todoID" element={<TodoCard loadTodo={loadTodo}/>} />
+        <Route path=":todoID" element={
+          <TodoCard loadTodo={loadTodo} toggleDone={toggleDoneCase} removeTodo={removeTodoCase}/>
+        } />
       </Routes>
     </BrowserRouter>
   );
