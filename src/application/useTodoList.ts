@@ -1,11 +1,13 @@
-import {useEffect, useState} from "react";
-import {addToList, ID, removeFromList, setCompletedStatus, Todo, TodoList} from "../domain/todo";
+import {useState} from "react";
+import {addToList, removeFromList, setCompletedStatus, Todo, TodoList} from "../domain/todo";
 import {useQuery} from "@apollo/client";
 import {GET_TODOS} from "./queries";
 
-export function useTodoCases() {
+export function useTodoList() {
   const { loading, error, data } = useQuery(GET_TODOS);
-  const [todos, setTodos] = useState<TodoList>([]);
+  const [, setTodos] = useState<TodoList>([]);
+
+
 
   function addTodoCase(title: string): void {
     setTodos(todos => {
@@ -41,27 +43,11 @@ export function useTodoCases() {
     });
   }
 
-  function loadTodo(todoID: ID): Todo {
-    const todo = todos.find(todo => todo.id === todoID);
-    if (!todo) {
-      throw Error(`Todo id: ${todoID} not found!`);
-    }
-
-    return todo;
-  }
-
-  useEffect(() => {
-    if (data && data.todos && data.todos.data && Array.isArray(data.todos.data)) {
-      setTodos(data.todos.data);
-    }
-  }, [data]);
-
   return {
-    todos,
+    todos: data?.todos?.data || [],
     addTodoCase,
     removeTodoCase,
     toggleDoneCase,
-    loadTodo,
     loading,
     error
   }

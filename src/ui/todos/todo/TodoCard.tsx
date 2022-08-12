@@ -1,25 +1,36 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
-import {ID, Todo} from "../../../domain/todo";
+import {Todo} from "../../../domain/todo";
+import {useTodo} from "../../../application/useTodo";
 
 type TodoCardProps = {
-  loadTodo: (todoId: ID) => Todo;
   toggleDone: (todo: Todo) => void;
   removeTodo: (todo: Todo) => void;
 }
 
-export function TodoCard({loadTodo, toggleDone, removeTodo}: TodoCardProps) {
+export function TodoCard({toggleDone, removeTodo}: TodoCardProps) {
   const {todoID} = useParams();
-  const todo = loadTodo(todoID as ID);
+
+  const {todo, loading, error} = useTodo(todoID);
   const navigate = useNavigate();
+
+  console.log({todo});
 
   const handleRemoveTodo = (todo: Todo): void => {
     removeTodo(todo);
     navigate('/');
   }
 
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>
+  }
+
   return (
     <section>
-      To do id : {todoID}
+      To do id : {todo.id}
       Title is: {todo.title}
       Completed id: {todo.completed ? 'YES' : 'NO'}
       <button onClick={() => toggleDone(todo)}>Mark Done</button>
