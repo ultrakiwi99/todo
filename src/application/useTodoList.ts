@@ -1,15 +1,23 @@
 import {useEffect, useState} from "react";
-import {addToList, removeFromList, setCompletedStatus, Todo, TodoList} from "../domain/todo";
+import {addToList, ID, removeFromList, setCompletedStatus, Todo, TodoList} from "../domain/todo";
 import {useQuery} from "@apollo/client";
 import {GET_TODOS} from "./queries";
 import {useAddTodo} from "./useAddTodo";
-import {MutateTodoData, CreateTodoResponse, UpdateTodoResponse, TodosManagementHandlers} from "./types";
+import {
+  MutateTodoData,
+  CreateTodoResponse,
+  UpdateTodoResponse,
+  TodosManagementHandlers,
+  DeleteTodoResponse
+} from "./types";
 import {useUpdateTodo} from "./useUpdateTodo";
+import {useDeleteTodo} from "./useDeleteTodo";
 
 export function useTodoList(): TodosManagementHandlers {
   const {loading, error, data} = useQuery(GET_TODOS);
   const {addTodo, addTodoLoading, addTodoError} = useAddTodo();
   const {updateTodo, updateLoading, updateError} = useUpdateTodo();
+  const {deleteTodo, deleteTodoLoading, deleteTodoError} = useDeleteTodo();
 
   const [todos, setTodos] = useState<TodoList>([]);
 
@@ -24,14 +32,13 @@ export function useTodoList(): TodosManagementHandlers {
       });
   }
 
-  function removeTodoCase(todo: Todo): void {
-    setTodos(todos => {
-      try {
-        return removeFromList(todos, todo.id);
-      } catch (error) {
-        return todos;
-      }
-    })
+  function deleteTodoAction(toID: ID): void {
+    deleteTodo({variables: { id: toID }})
+      .then((result: DeleteTodoResponse) => {
+        if (result.data?.deleteTodo) {
+          setTodos(todos => removeFromList(todos, toID));
+        }
+      });
   }
 
   function toggleDoneAction(todo: Todo): void {
@@ -54,9 +61,11 @@ export function useTodoList(): TodosManagementHandlers {
     addTodoAction,
     addTodoLoading,
     addTodoError,
-    removeTodoCase,
     toggleDoneAction,
     updateLoading,
-    updateError
+    updateError,
+    deleteTodoAction,
+    deleteTodoError,
+    deleteTodoLoading
   }
 }

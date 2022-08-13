@@ -6,18 +6,22 @@ import {useContext} from "react";
 import {TodosContext} from "../../context/TodosContext";
 
 export function TodoCard() {
-  const {removeTodoCase, updateLoading, toggleDoneAction} = useContext(TodosContext);
+  const {updateLoading, toggleDoneAction, deleteTodoLoading, deleteTodoAction} = useContext(TodosContext);
   const {todoID} = useParams();
   const {todo, loading, error} = useTodo(todoID);
   const navigate = useNavigate();
 
   const handleRemoveTodo = (todo: Todo): void => {
-    removeTodoCase(todo);
+    deleteTodoAction(todo.id);
     navigate('/');
   }
 
   if (updateLoading) {
     return <p>Updating...</p>
+  }
+
+  if (deleteTodoLoading) {
+    return <p>Deleting...</p>
   }
 
   return (

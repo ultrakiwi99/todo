@@ -9,10 +9,12 @@ export const TodosContext = createContext<TodosManagementHandlers>({
   addTodoAction: () => {},
   addTodoLoading: false,
   addTodoError: undefined,
-  removeTodoCase: () => {},
   toggleDoneAction: () => {},
   updateLoading: false,
   updateError: undefined,
+  deleteTodoAction: () => {},
+  deleteTodoLoading: false,
+  deleteTodoError: undefined
 });
 
 export function TodosContextProvider({children}: {children: ReactNode}) {

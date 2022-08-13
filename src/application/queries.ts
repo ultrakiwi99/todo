@@ -41,3 +41,9 @@ mutation($id:ID!,$input:UpdateTodoInput!) {
   }
 }
 `;
+
+export const DELETE_TODO = gql`
+mutation($id:ID!) {
+  deleteTodo(id:$id)
+}
+`;
