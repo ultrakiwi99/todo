@@ -3,13 +3,7 @@ import {addToList, ID, removeFromList, setCompletedStatus, Todo, TodoList} from 
 import {useQuery} from "@apollo/client";
 import {GET_TODOS} from "./queries";
 import {useAddTodo} from "./useAddTodo";
-import {
-  MutateTodoData,
-  CreateTodoResponse,
-  UpdateTodoResponse,
-  TodosManagementHandlers,
-  DeleteTodoResponse
-} from "./types";
+import {CreateTodoResponse, DeleteTodoResponse, MutateTodoData, TodosManagementHandlers} from "./types";
 import {useUpdateTodo} from "./useUpdateTodo";
 import {useDeleteTodo} from "./useDeleteTodo";
 
@@ -44,11 +38,8 @@ export function useTodoList(): TodosManagementHandlers {
   function toggleDoneAction(todo: Todo): void {
     const updateData: MutateTodoData = {title: todo.title, completed: !todo.completed};
     updateTodo({variables: {id: todo.id, input: updateData}})
-      .then((result: UpdateTodoResponse) => {
-        const updatedTodo = result.data?.updateTodo;
-        if (updatedTodo) {
-          setTodos(todos => setCompletedStatus(todos, updatedTodo.id, updatedTodo.completed));
-        }
+      .then(() => {
+          setTodos(todos => setCompletedStatus(todos, todo.id, updateData.completed));
       });
   }
 
@@ -66,6 +57,6 @@ export function useTodoList(): TodosManagementHandlers {
     updateError,
     deleteTodoAction,
     deleteTodoError,
-    deleteTodoLoading
+    deleteTodoLoading,
   }
 }

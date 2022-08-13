@@ -20,5 +20,11 @@ export function setCompletedStatus(todoList: TodoList, id: ID, completed: boolea
   return [...todoList.map(todo => todo.id === id ? {...todo, completed} : todo)];
 }
 
-
+export function getFromList(todoList: TodoList, id: ID): Todo {
+  const todo = todoList.find(todo => todo.id === id);
+  if (!todo) {
+    throw new Error(`Todo #${id} is not found`);
+  }
+  return todo;
+}
 
