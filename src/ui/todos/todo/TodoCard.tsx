@@ -1,37 +1,31 @@
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {Todo} from "../../../domain/todo";
 import {useTodo} from "../../../application/useTodo";
+import {TodoView} from "./TodoView";
+import {useContext} from "react";
+import {TodosContext} from "../../context/TodosContext";
 
-type TodoCardProps = {
-  toggleDone: (todo: Todo) => void;
-  removeTodo: (todo: Todo) => void;
-}
-
-export function TodoCard({toggleDone, removeTodo}: TodoCardProps) {
+export function TodoCard() {
+  const {removeTodoCase, updateLoading, toggleDoneAction} = useContext(TodosContext);
   const {todoID} = useParams();
-
   const {todo, loading, error} = useTodo(todoID);
   const navigate = useNavigate();
 
   const handleRemoveTodo = (todo: Todo): void => {
-    removeTodo(todo);
+    removeTodoCase(todo);
     navigate('/');
   }
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>
+  if (updateLoading) {
+    return <p>Updating...</p>
   }
 
   return (
     <section>
-      To do id : {todo.id}
-      Title is: {todo.title}
-      Completed id: {todo.completed ? 'YES' : 'NO'}
-      <button onClick={() => toggleDone(todo)}>Mark Done</button>
+      {todo
+        ? <TodoView todo={todo} loading={loading} error={error} />
+        : <p>Waiting for todo id...</p>}
+      <button onClick={() => toggleDoneAction(todo)}>Mark Done</button>
       <button onClick={() => handleRemoveTodo(todo)}>Remove</button>
       <Link to={"/"}>Back</Link>
     </section>

@@ -1,24 +1,16 @@
 import {AddTodo} from "./add-todo/AddTodo";
 import {Link} from "react-router-dom";
-import {TodoList} from "../../domain/todo";
-import {ApolloError} from "@apollo/client";
+import {useContext} from "react";
+import {TodosContext} from "../context/TodosContext";
+export function TodoListView() {
+  const {todos, loadingTodos, errorLoadingTodos} = useContext(TodosContext);
 
-type TodoListViewProps = {
-  todos: TodoList;
-  addTodo: (title:string) => void;
-  addTodoError: Error | undefined,
-  addTodoLoading: boolean,
-  error: ApolloError | undefined;
-  loading: boolean;
-}
-
-export function TodoListView({todos, loading, error, addTodo, addTodoError, addTodoLoading}: TodoListViewProps) {
-  if (loading) {
+  if (loadingTodos) {
     return <p>Loading...</p>;
   }
 
-  if (error) {
-    return <p>{error.message}</p>
+  if (errorLoadingTodos) {
+    return <p>{errorLoadingTodos.message}</p>
   }
 
   return (
@@ -33,7 +25,7 @@ export function TodoListView({todos, loading, error, addTodo, addTodoError, addT
           </span>
         </li>)}
       </ul>
-      <AddTodo addTodoHandler={addTodo} error={addTodoError} loading={addTodoLoading}/>
+      <AddTodo />
     </section>
   )
 }

@@ -31,3 +31,13 @@ mutation($input:CreateTodoInput!) {
   }
 }
 `;
+
+export const UPDATE_TODO = gql`
+mutation($id:ID!,$input:UpdateTodoInput!) {
+  updateTodo(id:$id, input:$input) {
+    id,
+    title,
+    completed
+  }
+}
+`;

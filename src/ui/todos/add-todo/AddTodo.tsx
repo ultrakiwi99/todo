@@ -1,12 +1,8 @@
-import {FormEvent, useState} from "react";
+import {FormEvent, useContext, useState} from "react";
+import {TodosContext} from "../../context/TodosContext";
 
-type AddTodoProps = {
-  addTodoHandler: (title: string) => void;
-  error: Error | undefined;
-  loading: boolean;
-};
-
-export function AddTodo({addTodoHandler, error, loading}: AddTodoProps) {
+export function AddTodo() {
+  const {addTodoAction, addTodoError, addTodoLoading} = useContext(TodosContext);
   const [title, setTitle] = useState<string>('');
   const [validationError, setValidationError] = useState<string>('');
 
@@ -28,7 +24,7 @@ export function AddTodo({addTodoHandler, error, loading}: AddTodoProps) {
 
   function addHandler() {
     if (title && !validationError) {
-      addTodoHandler(title);
+      addTodoAction(title);
       setTitle('');
     }
   }
@@ -36,7 +32,7 @@ export function AddTodo({addTodoHandler, error, loading}: AddTodoProps) {
   return (
     <section>
       <input
-        disabled={loading}
+        disabled={addTodoLoading}
         value={title}
         type={"text"}
         name={"title"}
@@ -45,8 +41,8 @@ export function AddTodo({addTodoHandler, error, loading}: AddTodoProps) {
         required={true}
         onInput={handleInput}/>
       {!!validationError && <p>{validationError}</p>}
-      <button onClick={addHandler} disabled={!!validationError || loading}>Add</button>
-      {error && <p>Error adding todo: {error.message}!</p>}
+      <button onClick={addHandler} disabled={!!validationError || addTodoLoading}>Add</button>
+      {addTodoError && <p>Error adding todo: {addTodoError.message}!</p>}
     </section>
   );
 }
