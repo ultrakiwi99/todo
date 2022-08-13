@@ -13,8 +13,6 @@ export function TodoCard({toggleDone, removeTodo}: TodoCardProps) {
   const {todo, loading, error} = useTodo(todoID);
   const navigate = useNavigate();
 
-  console.log({todo});
-
   const handleRemoveTodo = (todo: Todo): void => {
     removeTodo(todo);
     navigate('/');

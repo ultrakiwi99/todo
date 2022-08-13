@@ -21,3 +21,13 @@ query GetTodo($id: ID!) {
   }
 }
 `;
+
+export const ADD_TODO = gql`
+mutation($input:CreateTodoInput!) {
+  createTodo(input:$input) {
+    id,
+    title,
+    completed
+  }
+}
+`;

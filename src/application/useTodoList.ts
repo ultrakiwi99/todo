@@ -1,24 +1,26 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {addToList, removeFromList, setCompletedStatus, Todo, TodoList} from "../domain/todo";
 import {useQuery} from "@apollo/client";
 import {GET_TODOS} from "./queries";
+import {useAddTodo} from "./useAddTodo";
+import {CreateTodoData, CreateTodoResponse} from "./types";
 
 export function useTodoList() {
-  const { loading, error, data } = useQuery(GET_TODOS);
-  const [, setTodos] = useState<TodoList>([]);
+  const {loading, error, data} = useQuery(GET_TODOS);
+  const {addTodo, addTodoLoading, addTodoError} = useAddTodo();
 
+  const [todos, setTodos] = useState<TodoList>([]);
 
-
-  function addTodoCase(title: string): void {
-    setTodos(todos => {
-      try {
-        return addToList(todos, {
-          id: Math.floor(Math.random() * 10000).toString(),
-          title,
-          completed: false
-        });
-      } catch (error) {
-        return todos;
+  function addTodoAction(title: string): void {
+    const createData: CreateTodoData = {title, completed: false};
+    addTodo({
+      variables: {
+        input: createData
+      }
+    }).then((result: CreateTodoResponse) => {
+      const newTodo = result.data?.createTodo;
+      if (newTodo) {
+        setTodos(todos => addToList(todos, newTodo))
       }
     });
   }
@@ -43,9 +45,14 @@ export function useTodoList() {
     });
   }
 
+  useEffect(() => setTodos(data?.todos?.data || []), [data]);
+
   return {
-    todos: data?.todos?.data || [],
-    addTodoCase,
+    // todos: data?.todos?.data || [],
+    todos,
+    addTodoAction,
+    addTodoLoading,
+    addTodoError,
     removeTodoCase,
     toggleDoneCase,
     loading,

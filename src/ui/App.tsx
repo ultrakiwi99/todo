@@ -8,7 +8,9 @@ import {useTodoList} from "../application/useTodoList";
 function App() {
   const {
     todos,
-    addTodoCase,
+    addTodoAction,
+    addTodoError,
+    addTodoLoading,
     toggleDoneCase,
     removeTodoCase,
     error,
@@ -19,7 +21,13 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={
-          <TodoListView todos={todos} addTodo={addTodoCase} error={error} loading={loading}/>
+          <TodoListView
+            addTodo={addTodoAction}
+            addTodoError={addTodoError}
+            addTodoLoading={addTodoLoading}
+            todos={todos}
+            error={error}
+            loading={loading}/>
         }/>
         <Route path=":todoID" element={
           <TodoCard toggleDone={toggleDoneCase} removeTodo={removeTodoCase}/>
