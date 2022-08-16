@@ -1,0 +1,12 @@
+#add-todo {
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.alert {
+    font-size: 0.8rem;
+    color: red;
+    text-align: center;
+}

@@ -1,8 +1,9 @@
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Todo} from "../../../domain/todo";
 import {useTodo} from "../../../application/useTodo";
-import {useContext} from "react";
+import React, {useContext} from "react";
 import {TodosContext} from "../../context/TodosContext";
+import './TodoCard.css';
 
 export function TodoCard() {
   const {todoID} = useParams();
@@ -16,35 +17,41 @@ export function TodoCard() {
   }
 
   if (updateLoading) {
-    return <p>Updating...</p>
+    return <TodoStub text={'Updating...'} />;
   }
 
   if (deleteTodoLoading) {
-    return <p>Deleting...</p>
+    return <TodoStub text={'Loading todo...'} />;
   }
 
   if (todoLoading || !todo) {
-    return <p>Waiting for todo...</p>
+    return <TodoStub text={'Waiting for todo...'} />;
   }
 
   if (todoError) {
-    return <p>Error loading todo: {todoError.message}</p>
+    return <TodoStub text={`Error loading todo: ${todoError.message}`} />;
   }
 
   return (
-    <section>
+    <section id={'todo-card'}>
       {todo
         ? (
-          <section>
-            To do id : {todo.id}
-            Title is: {todo.title}
-            Completed id: {todo.completed ? 'YES' : 'NO'}
+          <section id={'todo-content'}>
+            <p id={'todo-id'}>#{todo.id}</p>
+            <h2>{todo.title}</h2>
+            Completed: {todo.completed ? 'YES' : 'NO'}
           </section>
         )
-        : <p>Waiting for todo id...</p>}
-      <button onClick={() => toggleDoneAction(todo)}>Mark Done</button>
-      <button onClick={() => handleRemoveTodo(todo)}>Remove</button>
-      <Link to={"/"}>Back</Link>
+        : <section id={'todo-waiting'}>Waiting for todo id...</section>}
+      <section id={'todo-controls'}>
+        <button onClick={() => toggleDoneAction(todo)}>Mark Done</button>
+        <button onClick={() => handleRemoveTodo(todo)}>Remove</button>
+        <button onClick={() => navigate('/')}>Go back</button>
+      </section>
     </section>
-  )
+  );
+}
+
+function TodoStub({text}: {text: string}) {
+  return <section id={'todo-stub'}>{text}</section>
 }

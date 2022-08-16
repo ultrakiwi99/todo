@@ -1,5 +1,6 @@
 import {FormEvent, useContext, useState} from "react";
 import {TodosContext} from "../../context/TodosContext";
+import './AddTodo.css';
 
 export function AddTodo() {
   const {addTodoAction, addTodoError, addTodoLoading} = useContext(TodosContext);
@@ -30,19 +31,21 @@ export function AddTodo() {
   }
 
   return (
-    <section>
-      <input
-        disabled={addTodoLoading}
-        value={title}
-        type={"text"}
-        name={"title"}
-        placeholder={'Enter task title...'}
-        onKeyDown={(event) => keyDownHandler(event.key)}
-        required={true}
-        onInput={handleInput}/>
-      {!!validationError && <p>{validationError}</p>}
-      <button onClick={addHandler} disabled={!!validationError || addTodoLoading}>Add</button>
-      {addTodoError && <p>Error adding todo: {addTodoError.message}!</p>}
+    <section id={'add-todo-container'}>
+      <section id={'add-todo'}>
+        <input
+          disabled={addTodoLoading}
+          value={title}
+          type={"text"}
+          name={"title"}
+          placeholder={'Enter task title...'}
+          onKeyDown={(event) => keyDownHandler(event.key)}
+          required={true}
+          onInput={handleInput}/>
+        <button onClick={addHandler} disabled={!!validationError || addTodoLoading}>Add</button>
+      </section>
+      {!!validationError && <p className={'alert'}>{validationError}</p>}
+      {addTodoError && <p className={'alert'}>Error adding todo: {addTodoError.message}!</p>}
     </section>
   );
 }

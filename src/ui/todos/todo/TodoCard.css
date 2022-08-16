@@ -1,0 +1,31 @@
+#todo-card {
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 10px;
+}
+
+#todo-content {
+    flex: 1;
+}
+
+#todo-id {
+    color: grey;
+    font-size: 0.8rem;
+    text-align: right;
+}
+
+#todo-stub {
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+}
+
+#todo-controls {
+    display: flex;
+    justify-content: space-evenly;
+}

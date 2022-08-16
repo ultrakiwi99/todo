@@ -7,18 +7,20 @@ import {TodosContextProvider} from "./context/TodosContext";
 
 function App() {
   return (
-    <TodosContextProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={
-            <TodoListView />
-          }/>
-          <Route path=":todoID" element={
-            <TodoCard />
-          }/>
-        </Routes>
-      </BrowserRouter>
-    </TodosContextProvider>
+    <section id={"app-root"}>
+      <TodosContextProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={
+              <TodoListView />
+            }/>
+            <Route path=":todoID" element={
+              <TodoCard />
+            }/>
+          </Routes>
+        </BrowserRouter>
+      </TodosContextProvider>
+    </section>
   );
 }
 
