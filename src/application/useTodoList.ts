@@ -3,12 +3,14 @@ import {addToList, ID, removeFromList, setCompletedStatus, Todo, TodoList} from 
 import {useQuery} from "@apollo/client";
 import {GET_TODOS} from "./queries";
 import {useAddTodo} from "./useAddTodo";
-import {CreateTodoResponse, DeleteTodoResponse, MutateTodoData, TodosManagementHandlers} from "./types";
+import {CreateTodoResponse, DeleteTodoResponse, MutateTodoData, SearchOperator, TodosManagementHandlers} from "./types";
 import {useUpdateTodo} from "./useUpdateTodo";
 import {useDeleteTodo} from "./useDeleteTodo";
 
 export function useTodoList(): TodosManagementHandlers {
-  const {loading, error, data} = useQuery(GET_TODOS);
+  const [slice] = useState({start: 0, end: 200});
+  const [operators, setSearchOperators] = useState<SearchOperator[]>([]);
+  const {loading, error, data} = useQuery(GET_TODOS, {variables: {options: { operators, slice }}});
   const {addTodo, addTodoLoading, addTodoError} = useAddTodo();
   const {updateTodo, updateLoading, updateError} = useUpdateTodo();
   const {deleteTodo, deleteTodoLoading, deleteTodoError} = useDeleteTodo();
@@ -43,7 +45,15 @@ export function useTodoList(): TodosManagementHandlers {
       });
   }
 
+  function setSearchConditions(data: SearchOperator[]): void {
+    setSearchOperators(data);
+  }
+
   useEffect(() => setTodos(data?.todos?.data || []), [data]);
+
+  useEffect(() => {
+    console.log(operators);
+  }, [operators]);
 
   return {
     todos,
@@ -58,5 +68,6 @@ export function useTodoList(): TodosManagementHandlers {
     deleteTodoAction,
     deleteTodoError,
     deleteTodoLoading,
+    setSearchConditions
   }
 }

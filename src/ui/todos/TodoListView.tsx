@@ -3,8 +3,20 @@ import {useNavigate} from "react-router-dom";
 import {useContext} from "react";
 import {TodosContext} from "../context/TodosContext";
 import "./TodoListView.css";
+import {Search} from "./search/Search";
 
 export function TodoListView() {
+  return (
+    <section>
+      <h1>List of Todos</h1>
+      <Search />
+      <TodoListContainer />
+      <AddTodo/>
+    </section>
+  );
+}
+
+function TodoListContainer() {
   const {todos, loadingTodos, errorLoadingTodos} = useContext(TodosContext);
 
   if (loadingTodos) {
@@ -16,8 +28,6 @@ export function TodoListView() {
   }
 
   return (
-    <section>
-      <h1>List of Todos</h1>
       <section id={'scrolling-container'}>
         <section id={'todo-list'}>
           {todos.map(
@@ -29,14 +39,11 @@ export function TodoListView() {
           )}
         </section>
       </section>
-      <AddTodo/>
-    </section>
-  )
+  );
 }
 
 function TodoPanel({id, title, completed}: { id: string, title: string, completed: boolean }) {
   const navigate = useNavigate();
-
   return (
     <article
       onClick={() => navigate(`/${id}`)}

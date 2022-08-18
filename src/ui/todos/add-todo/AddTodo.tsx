@@ -42,7 +42,7 @@ export function AddTodo() {
           onKeyDown={(event) => keyDownHandler(event.key)}
           required={true}
           onInput={handleInput}/>
-        <button onClick={addHandler} disabled={!!validationError || addTodoLoading}>Add</button>
+        <button onClick={addHandler} disabled={!!validationError || addTodoLoading}>+</button>
       </section>
       {!!validationError && <p className={'alert'}>{validationError}</p>}
       {addTodoError && <p className={'alert'}>Error adding todo: {addTodoError.message}!</p>}

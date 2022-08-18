@@ -14,7 +14,8 @@ export const TodosContext = createContext<TodosManagementHandlers>({
   updateError: undefined,
   deleteTodoAction: () => {},
   deleteTodoLoading: false,
-  deleteTodoError: undefined
+  deleteTodoError: undefined,
+  setSearchConditions: () => {}
 });
 
 export function TodosContextProvider({children}: {children: ReactNode}) {

@@ -39,7 +39,9 @@ export function TodoCard() {
           <section id={'todo-content'}>
             <p id={'todo-id'}>#{todo.id}</p>
             <h2>{todo.title}</h2>
-            Completed: {todo.completed ? 'YES' : 'NO'}
+            <section id={'completed-status'}>
+              Completed: {todo.completed ? 'YES' : 'NO'}
+            </section>
           </section>
         )
         : <section id={'todo-waiting'}>Waiting for todo id...</section>}

@@ -12,12 +12,6 @@ export type CreateTodoResponse = {
   }
 }
 
-export type UpdateTodoResponse = {
-  data?: {
-    updateTodo: Todo
-  }
-}
-
 export type DeleteTodoResponse = {
   data?: {
     deleteTodo: boolean
@@ -37,4 +31,17 @@ export type TodosManagementHandlers = {
   deleteTodoAction: (todoID: ID) => void;
   deleteTodoLoading: boolean;
   deleteTodoError: ApolloError | undefined;
+  setSearchConditions: (conditions:SearchOperator[]) => void;
+}
+
+export enum CompletedState {
+  Undefined,
+  Completed ,
+  NotCompleted
+}
+
+export type SearchOperator = {
+  kind: 'LIKE';
+  field: string;
+  value: string | boolean;
 }

@@ -1,12 +1,15 @@
 import {gql} from "@apollo/client";
 
 export const GET_TODOS = gql`
-query GetAllTodos {
-  todos {
-    data {
+query($options:PageQueryOptions) {
+  todos(options: $options){
+    data{
       id,
       title,
       completed
+    },
+    meta{
+      totalCount
     }
   }
 }

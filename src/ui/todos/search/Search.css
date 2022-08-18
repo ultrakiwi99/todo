@@ -1,0 +1,18 @@
+#search-todos {
+    display: flex;
+    gap: 10px;
+    padding-bottom: 25px;
+    border-bottom: 1px dotted black;
+}
+
+#search-todos input[type=search] {
+    flex: 1;
+    padding: 5px;
+}
+
+#search-todos input[type=reset],
+#search-todos button {
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}

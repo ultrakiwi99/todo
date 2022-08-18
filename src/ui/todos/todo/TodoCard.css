@@ -9,6 +9,8 @@
 
 #todo-content {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 #todo-id {
@@ -27,5 +29,11 @@
 
 #todo-controls {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
+}
+
+#completed-status {
+    margin-top: auto;
+    margin-bottom: 50px;
+    text-align: center;
 }
