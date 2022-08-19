@@ -1,30 +1,27 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {getFromList, ID, Todo, TodoList} from "../domain/todo";
+import {ApolloError} from "@apollo/client";
 
-export function useTodo(todos: TodoList, todoID: ID | undefined) {
-  const [todo, setTodo] = useState<Todo | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<Error | undefined>(undefined);
+export function useTodo(todos: TodoList) {
+  const [todoError, setTodoError] = useState<ApolloError | undefined>(undefined);
 
-  useEffect(() => {
-    if (todoID) {
-      try {
-        setError(undefined);
-        setLoading(true);
-        setTodo(getFromList(todos, todoID));
-        setLoading(false);
-      } catch (err) {
-        const loadError = err as Error;
-        setError(loadError);
-        setLoading(false)
-        setTodo(null);
-      }
+  function getTodo(id?: ID): Todo | undefined {
+    setTodoError(undefined);
+    if (!id) {
+      setTodoError(new ApolloError({
+        errorMessage: 'No todo to search'
+      }))
+      return;
     }
-  }, [todoID, todos])
-
-  return {
-    todo,
-    todoError: error,
-    todoLoading: loading
+    const todo = getFromList(todos, id);
+    if (!todo) {
+      setTodoError(new ApolloError({
+        errorMessage: 'Todo not found'
+      }))
+      return;
+    }
+    return todo;
   }
+
+  return {todoError, getTodo};
 }

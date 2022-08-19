@@ -32,6 +32,8 @@ export type TodosManagementHandlers = {
   deleteTodoLoading: boolean;
   deleteTodoError: ApolloError | undefined;
   setSearchConditions: (conditions:SearchOperator[]) => void;
+  getTodo: (id?: ID) => Todo | undefined;
+  todoError: ApolloError | undefined;
 }
 
 export enum CompletedState {

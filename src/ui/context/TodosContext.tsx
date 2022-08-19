@@ -1,6 +1,7 @@
 import {createContext, ReactNode} from "react";
 import {useTodoList} from "../../application/useTodoList";
 import {TodosManagementHandlers} from "../../application/types";
+import {Todo} from "../../domain/todo";
 
 export const TodosContext = createContext<TodosManagementHandlers>({
   todos: [],
@@ -15,7 +16,9 @@ export const TodosContext = createContext<TodosManagementHandlers>({
   deleteTodoAction: () => {},
   deleteTodoLoading: false,
   deleteTodoError: undefined,
-  setSearchConditions: () => {}
+  setSearchConditions: () => {},
+  getTodo: () => {return {} as Todo},
+  todoError: undefined
 });
 
 export function TodosContextProvider({children}: {children: ReactNode}) {

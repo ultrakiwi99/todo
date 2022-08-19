@@ -24,7 +24,7 @@ function TodoListContainer() {
   }
 
   if (errorLoadingTodos) {
-    return <p>{errorLoadingTodos.message}</p>
+    return <p>Error loading todos: {errorLoadingTodos.message}</p>
   }
 
   return (

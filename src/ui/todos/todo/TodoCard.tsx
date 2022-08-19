@@ -1,15 +1,22 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {Todo} from "../../../domain/todo";
-import {useTodo} from "../../../application/useTodo";
 import React, {useContext} from "react";
 import {TodosContext} from "../../context/TodosContext";
 import './TodoCard.css';
 
 export function TodoCard() {
-  const {todoID} = useParams();
-  const {updateLoading, toggleDoneAction, deleteTodoLoading, deleteTodoAction, todos} = useContext(TodosContext);
-  const {todo, todoError, todoLoading} = useTodo(todos, todoID);
   const navigate = useNavigate();
+  const {todoID} = useParams();
+  const {
+    updateLoading,
+    toggleDoneAction,
+    deleteTodoLoading,
+    deleteTodoAction,
+    getTodo,
+    todoError
+  } = useContext(TodosContext);
+
+  const todo = getTodo(todoID);
 
   const handleRemoveTodo = (todo: Todo): void => {
     deleteTodoAction(todo.id);
@@ -24,7 +31,7 @@ export function TodoCard() {
     return <TodoStub text={'Loading todo...'} />;
   }
 
-  if (todoLoading || !todo) {
+  if (!todo) {
     return <TodoStub text={'Waiting for todo...'} />;
   }
 
@@ -33,7 +40,7 @@ export function TodoCard() {
   }
 
   return (
-    <section id={'todo-card'}>
+    <section id={'todo-card'} data-testid={'todo'}>
       {todo
         ? (
           <section id={'todo-content'}>
